@@ -1,0 +1,52 @@
+name: Update Solar System Dashboard
+
+on:
+  schedule:
+    # 12:15 AM PST / 1:15 AM PDT, matching the Moon Phase Dashboard.
+    - cron: '15 8 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: Render dashboard image
+        env:
+          OUTPUT_DIR: site
+          TZ_NAME: ${{ vars.TZ_NAME }}
+          ROTATE: ${{ vars.ROTATE }}
+          OUTPUT_PALETTE: ${{ vars.OUTPUT_PALETTE }}
+        run: |
+          python scripts/render_solar.py
+          cp index.html site/index.html
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
