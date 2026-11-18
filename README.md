@@ -2,6 +2,8 @@
 
 A daily 1200 × 1600 dashboard for E Ink Spectra 6 displays such as the Seeed E1004. It shares the black background, six-color accents, and bundled Inter fonts of the [Moon Phase Dashboard](https://github.com/MostlyFunctionalEngineering/moon_phase_dashboard). The planet icons use natural RGB colors for the display to dither.
 
+<a href="assets/dashboard-preview.png"><img src="assets/dashboard-preview.png" width="420" alt="Example dashboard showing a top-down map of the eight planets, the asteroid belt, and distances from the Sun"></a>
+
 The map looks down from ecliptic north. The planet positions and orbit guides use a square-root distance scale to keep the inner solar system readable. Planet sizes are illustrative. The dithered asteroid belt represents the main belt between 2.2 and 3.2 AU. The dashboard shows the local date, Earth’s distance from the Sun, the planet currently closest to Earth, and each planet’s distance from the Sun in astronomical units (AU).
 
 Planet positions are computed locally from [NASA/JPL’s approximate planetary elements](https://ssd.jpl.nasa.gov/planets/approx_pos.html) for 1800–2050. The Earth marker uses the Earth–Moon barycenter. No astronomy API or credentials are required at render time.
