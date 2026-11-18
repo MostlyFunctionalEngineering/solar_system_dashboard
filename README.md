@@ -1,16 +1,18 @@
 # Solar System Dashboard
 
-A daily 1200 × 1600 dashboard for E Ink Spectra 6 displays such as the Seeed E1004. It shares the black background, six-color palette, and bundled Inter fonts of the [Moon Phase Dashboard](https://github.com/MostlyFunctionalEngineering/moon_phase_dashboard).
+A daily 1200 × 1600 dashboard for E Ink Spectra 6 displays such as the Seeed E1004. It shares the black background, six-color accents, and bundled Inter fonts of the [Moon Phase Dashboard](https://github.com/MostlyFunctionalEngineering/moon_phase_dashboard). The planet icons use natural RGB colors for the display to dither.
 
-The map looks down from ecliptic north. Each planet marker shows its current heliocentric longitude. Orbit spacing and marker sizes are schematic so all eight planets fit on the display. The dashboard shows the local date, Earth’s distance from the Sun, the planet currently closest to Earth, and each planet’s distance from the Sun in astronomical units (AU).
+The map looks down from ecliptic north. The planet positions and orbit guides use a square-root distance scale to keep the inner solar system readable. Planet sizes are illustrative. The dithered asteroid belt represents the main belt between 2.2 and 3.2 AU. The dashboard shows the local date, Earth’s distance from the Sun, the planet currently closest to Earth, and each planet’s distance from the Sun in astronomical units (AU).
 
-Positions are computed locally from [NASA/JPL’s approximate planetary elements](https://ssd.jpl.nasa.gov/planets/approx_pos.html) for 1800–2050. The Earth marker uses the Earth–Moon barycenter. No astronomy API or credentials are required.
+Planet positions are computed locally from [NASA/JPL’s approximate planetary elements](https://ssd.jpl.nasa.gov/planets/approx_pos.html) for 1800–2050. The Earth marker uses the Earth–Moon barycenter. No astronomy API or credentials are required at render time.
+
+Set `SHOW_MOONS=1` to draw white dots for eight major moons. Each dot follows the moon’s calculated direction from its planet, with enlarged offsets for readability. [Astronomy Engine](https://github.com/cosinekitty/astronomy) supplies Earth’s Moon, Io, Europa, Ganymede, and Callisto. Titan, Titania, and Triton use approximate models fitted to [JPL Horizons](https://ssd.jpl.nasa.gov/horizons/) vectors for 2025–2028. Their accuracy decreases for dates farther from that interval.
 
 ## GitHub Pages
 
 Select **GitHub Actions** under **Settings → Pages → Build and deployment**, then run **Update Solar System Dashboard** from the Actions tab. The scheduled workflow runs daily at 08:15 UTC, matching the Moon Phase Dashboard.
 
-Point your display at `https://<owner>.github.io/<repository>/solar_dashboard.png`. The site root shows the image in a browser, and `solar_data.json` contains the UTC timestamp, local date, heliocentric coordinates, and distances.
+Point your display at `https://<owner>.github.io/<repository>/solar_dashboard.png`. The site root shows the image in a browser, and `solar_data.json` contains the UTC timestamp, local date, heliocentric coordinates, distances, and planet-centered moon offsets in kilometers.
 
 The workflow accepts these optional repository variables under **Settings → Secrets and variables → Actions → Variables**.
 
@@ -18,7 +20,8 @@ The workflow accepts these optional repository variables under **Settings → Se
 | --- | --- | --- |
 | `TZ_NAME` | `America/Los_Angeles` | IANA time zone for the date shown on the dashboard |
 | `ROTATE` | `0` | Clockwise rotation in degrees. Supports `0`, `90`, `180`, and `270`. |
-| `OUTPUT_PALETTE` | `pure` | Six pure panel colors. Use `device` for the measured panel colors. |
+| `OUTPUT_PALETTE` | `pure` | Use `device` for measured panel colors on the text, background, and accents. Planet icons use RGB in both modes. |
+| `SHOW_MOONS` | `0` | Set to `1` to show the moon dots. Moon positions are always included in the JSON. |
 
 ## Run locally
 

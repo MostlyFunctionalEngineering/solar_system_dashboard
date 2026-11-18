@@ -45,10 +45,8 @@ ELEMENTS = {
 }
 
 
-def position(elements, rates, centuries):
-    a, e, i, longitude, perihelion, node = (
-        value + rate * centuries for value, rate in zip(elements, rates)
-    )
+def position(elements):
+    a, e, i, longitude, perihelion, node = elements
     mean = radians((longitude - perihelion + 180) % 360 - 180)
     anomaly = mean
     for _ in range(8):
@@ -66,9 +64,12 @@ def position(elements, rates, centuries):
     )
 
 
-def positions(now):
+def elements_at(now):
     if not 1800 <= now.year <= 2050:
         raise ValueError("SOLAR_NOW must fall within JPL's 1800–2050 model range")
     # UTC is a sufficient approximation of the ephemeris time for this display.
     centuries = (now - J2000).total_seconds() / (36525 * 86400)
-    return {name: position(elements, rates, centuries) for name, (elements, rates) in ELEMENTS.items()}
+    return {
+        name: tuple(value + rate * centuries for value, rate in zip(elements, rates))
+        for name, (elements, rates) in ELEMENTS.items()
+    }

@@ -37,6 +37,7 @@ jobs:
           TZ_NAME: ${{ vars.TZ_NAME }}
           ROTATE: ${{ vars.ROTATE }}
           OUTPUT_PALETTE: ${{ vars.OUTPUT_PALETTE }}
+          SHOW_MOONS: ${{ vars.SHOW_MOONS }}
         run: |
           python scripts/render_solar.py
           cp index.html site/index.html
